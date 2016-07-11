@@ -25,7 +25,7 @@ namespace Game.RuleEngine
         }
 
         /// <summary>
-        /// Applies Conway's life rules to evolve the current generation into the next generation.
+        /// Applies rules to evolve the current generation into the next generation.
         /// </summary>        
         public void EvolveGeneration()
         {          
@@ -40,12 +40,17 @@ namespace Game.RuleEngine
 
                     int numberOfAliveNeighbors = GetNumberOfAliveNeighbors(CurrentGeneration, cell);
 
+                    //1. Any live cell with fewer than two live neighbours dies (due to underpopulation).
+                    //2. Any live cell with two or three live neighbours lives on to the next generation.
+                    //3. Any live cell with more than three live neighbours dies, (due to overcrowding).
                     if (cell.Status == StateOfLife.Alive 
                             && (numberOfAliveNeighbors < UnderPopulationThreshold 
                                 || numberOfAliveNeighbors > OverPopulationThreshold))
                     {
                         cellLifeChangeTupleList.Add(new Tuple<int, int, StateOfLife>(row, column, StateOfLife.Dead));
                     }
+
+                    //4. Any dead cell with exactly three live neighbours becomes a live cell (by reproduction).
                     else if (cell.Status == StateOfLife.Dead 
                                 && numberOfAliveNeighbors == ReproductionThreshold)
                     {
@@ -81,20 +86,26 @@ namespace Game.RuleEngine
             CurrentGeneration.ToggleCellLife(row, column);
         }
        
-        private int GetNumberOfAliveNeighbors(Generation generation, Cell cell)
+        /// <summary>
+        /// Find the live neighbour cells, there are max eight cells
+        /// </summary>
+        /// <param name="currentGeneration"></param>
+        /// <param name="cell"></param>
+        /// <returns></returns>
+        private int GetNumberOfAliveNeighbors(Generation currentGeneration, Cell cell)
         {
             int numberOfAliveNeighbours = 0;
 
             List<Cell> neighboringCells = new List<Cell>
             {
-                generation.GetCell(cell.Row - 1, cell.Column - 1),
-                generation.GetCell(cell.Row - 1, cell.Column + 1),
-                generation.GetCell(cell.Row, cell.Column + 1),
-                generation.GetCell(cell.Row + 1, cell.Column + 1),
-                generation.GetCell(cell.Row + 1, cell.Column),
-                generation.GetCell(cell.Row + 1, cell.Column - 1),
-                generation.GetCell(cell.Row, cell.Column - 1),
-                generation.GetCell(cell.Row - 1, cell.Column)
+                currentGeneration.GetCell(cell.Row - 1, cell.Column - 1),
+                currentGeneration.GetCell(cell.Row - 1, cell.Column + 1),
+                currentGeneration.GetCell(cell.Row, cell.Column + 1),
+                currentGeneration.GetCell(cell.Row + 1, cell.Column + 1),
+                currentGeneration.GetCell(cell.Row + 1, cell.Column),
+                currentGeneration.GetCell(cell.Row + 1, cell.Column - 1),
+                currentGeneration.GetCell(cell.Row, cell.Column - 1),
+                currentGeneration.GetCell(cell.Row - 1, cell.Column)
             };            
 
             foreach (var neighboringCell in neighboringCells)

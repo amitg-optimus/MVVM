@@ -8,11 +8,10 @@ using System.Windows.Media;
 namespace Game.Utilities
 {
     /// <summary>
-    /// Enables binding conversion between a cell's living status and a colour for whether
-    /// the cell is dead or alive.
+    /// Enables binding conversion between a cell's 
+    /// living status and a colour for whether the cell is dead or alive.
     /// </summary>
-    public class LifeToColourConverter : IValueConverter
-    {
+    public class LifeToColourConverter : IValueConverter    {
         
         public SolidColorBrush AliveColour { get; set; }
         
@@ -28,13 +27,10 @@ namespace Game.Utilities
         {
             return (StateOfLife)value == StateOfLife.Alive ? AliveColour : DeadColour;
         }
-       
+
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is SolidColorBrush)
-                return ((SolidColorBrush) value) == AliveColour;
-
-            return StateOfLife.Alive;
+            return ((SolidColorBrush)value) == AliveColour ? StateOfLife.Alive : StateOfLife.Dead;
         }
     }
 }

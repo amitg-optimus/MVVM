@@ -5,7 +5,7 @@ using System.Text;
 namespace Game.Models
 {
     /// <summary>
-    /// Represents a particular generation of the game of life.
+    /// Represents the generation of the game of life.
     /// </summary>
     public class Generation
     {
@@ -20,7 +20,7 @@ namespace Game.Models
         public int UniverseSize { get; set; }
 
         /// <summary>
-        /// Initialises a new instance of a Generation.
+        /// Initialises a new instance of the Generation.
         /// </summary>
         /// <param name="universeSize">Size of the universe.</param>
         public Generation(int universeSize)
@@ -32,7 +32,7 @@ namespace Game.Models
         }
 
         /// <summary>
-        /// Initialises the generation.
+        /// Initialises the generation. By default the status will be Dead
         /// </summary>
         private void Initialise()
         {
@@ -60,10 +60,7 @@ namespace Game.Models
 
         /// <summary>
         /// Sets a particular cell in the universe to be dead or alive.
-        /// </summary>
-        /// <param name="row">Row index of the cell.</param>
-        /// <param name="column">Column index of the cell.</param>
-        /// <param name="alive">A boolean value that indicates if this cell is dead or alive.</param>
+        /// </summary>       
         public void SetCell(int row, int column, StateOfLife status)
         {
             Cell cell = GetCell(row, column);
@@ -89,29 +86,6 @@ namespace Game.Models
                 cell.Status = StateOfLife.Dead;
             else
                 cell.Status = StateOfLife.Alive;
-        }
-
-        /// <summary>
-        /// Builds a string representation of this generation.
-        /// </summary>
-        /// <returns>String representation of this generation.</returns>
-        public override string ToString()
-        {
-            StringBuilder gridString = new StringBuilder();
-
-            for (int row = 0; row < UniverseSize; row++)
-            {
-                for (int column = 0; column < UniverseSize; column++)
-                {
-                    gridString.Append(
-                        string.Format("{0} ", GetCell(row, column).Status == StateOfLife.Alive ? "1" : "0")
-                    );
-                }
-
-                gridString.AppendLine();
-            }
-
-            return gridString.ToString();
-        }
+        }       
     }
 }

@@ -17,6 +17,7 @@ namespace Game
     {      
         private GenerationViewModel generationViewModel;
 
+        //TODO: can be configured
         private int UNIVERSIZE = 5;
 
         public GenerationView()
@@ -30,7 +31,11 @@ namespace Game
             DataContext = generationViewModel;
         }
 
-      
+        /// <summary>
+        /// TODO:GUI build from code behind to make it dynamic in future
+        /// Generate the GUI for the universe grid, each cell contains a texy block
+        /// </summary>
+        /// <param name="generationViewModel"></param>
         private void BuildGridUI(GenerationViewModel generationViewModel)
         { 
             for (int row = 0; row < generationViewModel.UniverseSize; row++)
