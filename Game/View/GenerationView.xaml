@@ -8,7 +8,10 @@
         Title="Game of Life" Height="350" Width="525">
     <Grid>
         <Grid Height="Auto">
-            <Grid Name="UniverseGrid" ShowGridLines="True" Margin="10,10,10,42" />
+
+            <Grid Name="UniverseGrid" ShowGridLines="True" Margin="10,10,10,42">
+                <Border BorderBrush="Black" BorderThickness="2" IsEnabled="True"/>               
+            </Grid>
         </Grid>
         <Button Command="{Binding EvolveCommand}" Width="Auto" Margin="364,279,10,10">Evolve Generation</Button>
     </Grid>

@@ -18,78 +18,13 @@ namespace Game.ViewModels
         /// <summary>
         /// Gets the current universe size.
         /// </summary>
-        public int UniverseSize { get { return engine.GetUniverseSize(); } }
-
-        #region PopulationCount Property
-        /// <summary>
-        /// Count of the current population.
-        /// </summary>
-        private int populationCount;
-
-        /// <summary>
-        /// Number
-        /// </summary>
-        public int PopulationCount
-        {
-            get { return populationCount; }
-            private set
-            {
-                populationCount = value;
-                OnPropertyChanged();
-            }
-        }
-        #endregion
-
-        #region GenerationNumber Property
-        /// <summary>
-        /// Number of generations the current generation has evolved from.
-        /// </summary>
-        private int generationNumber;
-
-        /// <summary>
-        /// Gets the current generation number.
-        /// </summary>
-        public int GenerationNumber
-        {
-            get { return generationNumber; }
-            private set
-            {
-                generationNumber = value;
-                OnPropertyChanged();
-            }
-        }
-        #endregion
-
-        #region EvolutionEnded Property
-        /// <summary>
-        /// Indicates whether the generation has stopped evolving.
-        /// </summary>
-        private bool evolutionEnded;
-
-        /// <summary>
-        /// Gets a boolean which indicates if the generation has stopped evolving.
-        /// </summary>
-        public bool EvolutionEnded
-        {
-            get { return evolutionEnded; }
-            private set
-            {
-                evolutionEnded = value;
-                OnPropertyChanged();
-            }
-        }
-        #endregion
+        public int UniverseSize { get { return engine.GetUniverseSize(); } }              
 
         #region Command Properties
         /// <summary>
         /// RelayCommand for evolving the current generation.
         /// </summary>
-        public RelayCommand<object> EvolveCommand { get; set; }
-
-        /// <summary>
-        /// Relay command for resetting the game of life.
-        /// </summary>
-        public RelayCommand<object> ResetCommand { get; set; }
+        public RelayCommand<object> EvolveCommand { get; set; }        
 
         /// <summary>
         /// RelayCommand for toggling a particular cell's life.
@@ -106,8 +41,7 @@ namespace Game.ViewModels
             engine = new EvolutionEngine(new Generation(universeSize));
 
             EvolveCommand = new RelayCommand<object>(
-                _ => EvolveGeneration(), 
-                _ => CanEvolveGeneration()
+                _ => EvolveGeneration()
             );
             
 
@@ -133,22 +67,8 @@ namespace Game.ViewModels
         /// </summary>
         private void EvolveGeneration()
         {
-            EvolutionEngineActionResult result = engine.EvolveGeneration();
-            
-            GenerationNumber = result.GenerationNumber;
-            EvolutionEnded = result.EvolutionEnded;
+            engine.EvolveGeneration();
         }
-
-        /// <summary>
-        /// Determines if the current generation can be evolved.
-        /// </summary>
-        /// <returns>A boolean value which indicates if the current generation can further evolve.</returns>
-        private bool CanEvolveGeneration()
-        {
-            return !EvolutionEnded;
-        }      
-
-        
        
         /// <summary>
         /// Makes a specfied cell alive or dead.

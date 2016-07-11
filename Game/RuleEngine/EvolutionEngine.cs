@@ -13,15 +13,12 @@ namespace Game.RuleEngine
     /// </summary>
     public class EvolutionEngine
     {
-        /// <summary>
-        /// Gets the current generation.
-        /// </summary>
-        private Generation CurrentGeneration { get; set; }        
+        private const int UnderPopulationThreshold = 2,
+               OverPopulationThreshold = 3,
+               ReproductionThreshold = 3;
 
-        /// <summary>
-        /// Initialises a new instance of the LifeEngine with a specified initial generation.
-        /// </summary>
-        /// <param name="initialGeneration">The initial generation to start from.</param>
+        private Generation CurrentGeneration { get; set; }  
+               
         public EvolutionEngine(Generation initialGeneration)
         {
             CurrentGeneration = initialGeneration;            
@@ -29,13 +26,9 @@ namespace Game.RuleEngine
 
         /// <summary>
         /// Applies Conway's life rules to evolve the current generation into the next generation.
-        /// </summary>
-        /// <returns>An EvolutionEngineActionResult.</returns>
-        public EvolutionEngineActionResult EvolveGeneration()
-        {
-            const int UnderPopulationThreshold = 2,
-                OverPopulationThreshold = 3,
-                ReproductionThreshold = 3;
+        /// </summary>        
+        public void EvolveGeneration()
+        {          
 
             IList<Tuple<int, int, StateOfLife>> cellLifeChangeTupleList = new List<Tuple<int, int, StateOfLife>>();
 
@@ -47,29 +40,24 @@ namespace Game.RuleEngine
 
                     int numberOfAliveNeighbors = GetNumberOfAliveNeighbors(CurrentGeneration, cell);
 
-                    if (cell.Status == StateOfLife.Alive && (numberOfAliveNeighbors < UnderPopulationThreshold || numberOfAliveNeighbors > OverPopulationThreshold))
+                    if (cell.Status == StateOfLife.Alive 
+                            && (numberOfAliveNeighbors < UnderPopulationThreshold 
+                                || numberOfAliveNeighbors > OverPopulationThreshold))
                     {
                         cellLifeChangeTupleList.Add(new Tuple<int, int, StateOfLife>(row, column, StateOfLife.Dead));
                     }
-                    else if (cell.Status == StateOfLife.Dead && numberOfAliveNeighbors == ReproductionThreshold)
+                    else if (cell.Status == StateOfLife.Dead 
+                                && numberOfAliveNeighbors == ReproductionThreshold)
                     {
                         cellLifeChangeTupleList.Add(new Tuple<int, int, StateOfLife>(row, column, StateOfLife.Alive));
                     }
                 }
             }
 
-            if (cellLifeChangeTupleList.Any())
+            foreach (var tuple in cellLifeChangeTupleList)
             {
-                Parallel.ForEach(
-                    cellLifeChangeTupleList,
-                    tuple => CurrentGeneration.SetCell(tuple.Item1, tuple.Item2, tuple.Item3)
-                );
-            }
-
-            return new EvolutionEngineActionResult(
-                evolutionEnded: !cellLifeChangeTupleList.Any()
-                
-            );
+                CurrentGeneration.SetCell(tuple.Item1, tuple.Item2, tuple.Item3);
+            }       
         }       
          
         

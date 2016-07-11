@@ -56,7 +56,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="RuleEngine\EvolutionEngine.cs" />
-    <Compile Include="RuleEngine\EvolutionEngineActionResult.cs" />
     <Compile Include="Utilities\Enums.cs" />
     <Compile Include="Utilities\LifeToColourConverter.cs" />
     <Compile Include="Utilities\RelayCommand.cs" />
