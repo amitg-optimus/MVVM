@@ -30,7 +30,7 @@ namespace Game.RuleEngine
         public void EvolveGeneration()
         {          
 
-            IList<Tuple<int, int, StateOfLife>> cellLifeChangeTupleList = new List<Tuple<int, int, StateOfLife>>();
+            IList<Cell> cellLifeChangeTupleList = new List<Cell>();
 
             for (int row = 0; row < CurrentGeneration.UniverseSize; row++)
             {
@@ -47,21 +47,21 @@ namespace Game.RuleEngine
                             && (numberOfAliveNeighbors < UnderPopulationThreshold 
                                 || numberOfAliveNeighbors > OverPopulationThreshold))
                     {
-                        cellLifeChangeTupleList.Add(new Tuple<int, int, StateOfLife>(row, column, StateOfLife.Dead));
+                        cellLifeChangeTupleList.Add(new Cell(row, column, StateOfLife.Dead));
                     }
 
                     //4. Any dead cell with exactly three live neighbours becomes a live cell (by reproduction).
                     else if (cell.Status == StateOfLife.Dead 
                                 && numberOfAliveNeighbors == ReproductionThreshold)
                     {
-                        cellLifeChangeTupleList.Add(new Tuple<int, int, StateOfLife>(row, column, StateOfLife.Alive));
+                        cellLifeChangeTupleList.Add(new Cell(row, column, StateOfLife.Alive));
                     }
                 }
             }
 
-            foreach (var tuple in cellLifeChangeTupleList)
+            foreach (var cell in cellLifeChangeTupleList)
             {
-                CurrentGeneration.SetCell(tuple.Item1, tuple.Item2, tuple.Item3);
+                CurrentGeneration.SetCell(cell.Row, cell.Column, cell.Status);
             }       
         }       
          
